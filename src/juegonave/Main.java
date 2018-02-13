@@ -26,10 +26,9 @@ import javafx.stage.Stage;
  *
  * @author DaSTer
  */
-public class AnguloNave extends Application {
+public class Main extends Application {
     //Nave
-    Polygon nave = new Polygon ();
-    Polygon asteroide = new Polygon ();
+    Nave nave = new Nave ();
     double angulonave;
     double direccionnave;
     double direccionnaveradianes;
@@ -50,6 +49,8 @@ public class AnguloNave extends Application {
     final int ventanay =400;
     Scene ventana;
     //Asteroide
+    Asteroide asteroide = new Asteroide();
+    
     int velocidadasteroide = 1;
     double anguloastradian;
     double anguloasteroide= Math.random()*359;
@@ -58,32 +59,20 @@ public class AnguloNave extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+        
         Pane root = new Pane();
         ventana = new Scene(root, ventanax, ventanay, Color.BLACK);
         primaryStage.setScene(ventana);
         primaryStage.show();
         
+        //Llamada a nave para mostrarla en ventana
+        root.getChildren().add(nave.getnave());
+        nave.getnave().setFill(Color.BLUE);
         
+        //Llamada a asteroide para mostrarlo en ventana
+        root.getChildren().add(asteroide.getpoligono());
+        asteroide.getpoligono().setFill(Color.RED);
         
-        nave.setFill(Color.BLUE);
-        nave.getPoints().addAll(new Double[]{
-            0.0, -30.0,
-            10.0, 0.0,
-            0.0, -5.0,
-            -10.0, 0.0});
-        root.getChildren().add(nave);
-        
-        asteroide.setFill(Color.RED);
-        asteroide.getPoints().addAll(new Double[]{
-            0.0, 50.0,
-            100.0, 100.0,
-            200.0, 50.0,
-            125.0, 0.0,
-            75.0, 0.0});
-        root.getChildren().add(asteroide);
-        
-        System.out.print(anguloasteroide);
- 
         ventana.setOnKeyPressed((KeyEvent event) -> {
             switch(event.getCode()){
                 case RIGHT:
@@ -149,14 +138,12 @@ public class AnguloNave extends Application {
                 posxas += velocidadasteroide;
                 posyas += velocidadasteroide;
                 
-                // ME HE QUEDADO EN QUE NO SE MUEVE EL ASTEROIDE
+                nave.getnave().setLayoutX(posx);
+                nave.getnave().setLayoutY(posy);
+                nave.getnave().setRotate(direccionnave);
                 
-                nave.setLayoutX(posx);
-                nave.setLayoutY(posy);
-                nave.setRotate(direccionnave);
-                
-                asteroide.setLayoutX(posxas);
-                asteroide.setLayoutY(posyas);
+                asteroide.getpoligono().setLayoutX(posxas);
+                asteroide.getpoligono().setLayoutY(posyas);
             }
         };
 }//Cierre de la Clase JuegoNave
