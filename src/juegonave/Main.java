@@ -5,6 +5,7 @@
  */
 package juegonave;
 
+import java.util.ArrayList;
 import java.util.Random;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -18,6 +19,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
@@ -29,17 +31,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
     //Nave
     Nave nave = new Nave ();
-    double angulonave;
-    double direccionnave;
-    double direccionnaveradianes;
-    double velocidadnave;
-    double velocidadgiro;
-    //Variables de la posicion nave
-    double direccionx = Math.sin(direccionnaveradianes);
-    double direcciony = Math.cos(direccionnaveradianes);
-    //Variables velocidad nave
-    double velocidadx=0;
-    double velocidady=0;
+    
+    
     
     double posx = 400;
     double posy = 200;
@@ -51,15 +44,26 @@ public class Main extends Application {
     //Asteroide
     Asteroide asteroide = new Asteroide();
     
-    int velocidadasteroide = 1;
-    double anguloastradian;
-    double anguloasteroide= Math.random()*359;
-    double posxas = 400;
-    double posyas = 200;
+    Bala bala;
+
+//Lista balas ArrayList
+    ArrayList<Bala> listaBalas = new ArrayList();
     
     @Override
     public void start(Stage primaryStage) {
         
+        /*
+        Declaracion del arraylist:
+        Arraylist<Bola> listaBolas = new Arraylist();
+        
+        Añadir bolas a la lista:
+        for (int i=0; i<10; i++){
+            Bola bola = new Bola();
+            listaBolas.add(bola);
+        }
+        Cojer la lista:
+        Bola bola5 = listaBolas.get(5);
+        */
         Pane root = new Pane();
         ventana = new Scene(root, ventanax, ventanay, Color.BLACK);
         primaryStage.setScene(ventana);
@@ -73,30 +77,31 @@ public class Main extends Application {
         root.getChildren().add(asteroide.getpoligono());
         asteroide.getpoligono().setFill(Color.RED);
         
+
+
         ventana.setOnKeyPressed((KeyEvent event) -> {
             switch(event.getCode()){
                 case RIGHT:
-                    velocidadgiro=1;
+                    nave.setVelocidadGiro(1);
                     break;
+                    //nave.velocidadgiro=1;break;
                 case LEFT:
-                    velocidadgiro=-1;
+                    nave.setVelocidadGiro(-1);
                     break;
                 case UP:
-                    direccionx = Math.sin(direccionnaveradianes);
-                    direcciony = Math.cos(direccionnaveradianes);
-                    velocidadx += direccionx*0.2;
-                    velocidady += -direcciony*0.2;
-                    if (velocidadx >= 3){
-                        velocidadx =3;
-                    }
-                    if (velocidady >= 3){
-                        velocidady =3;
-                    }
+                    nave.pulsaArriba();
+                    break;
+                case SPACE:
+                        bala = new Bala(nave.posx, nave.posy, nave.angulonave);
+                        listaBalas.add(bala);
+                        root.getChildren().add(bala.getBala());
+                        //Bola bola5 = listaBolas.get(5);
+
                     break;
             }
         });
         ventana.setOnKeyReleased((KeyEvent event) -> {
-            velocidadgiro = 0;
+            nave.setVelocidadGiro(0);
         });
         animationNave.start(); //Llamada a la animación
     }//Cierre Método Start
@@ -104,46 +109,16 @@ public class Main extends Application {
     AnimationTimer animationNave = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                direccionnave = angulonave % 360;
-                direccionnaveradianes = Math.toRadians(direccionnave);
-                
-                angulonave+= velocidadgiro;
-                
-                posx += velocidadx;
-                posy += velocidady;
-                
-                
-                
-                if (posx >= ventanax){
-                    posx = 0;
+                //NAVE
+                nave.naveMover();
+                //ASTEROIDE 
+                asteroide.asteroideMover();
+                //BALA
+                for (int i=0; i<listaBalas.size(); i++){
+                    Bala bala = listaBalas.get(i);
+                    bala.mueveBala();
+                    
                 }
-                if (posy >= ventanay){
-                    posy = 0;
-                }
-                
-                if (posx < 0){
-                    posx = ventanax;
-                }
-                
-                if (posy < 0){
-                    posy = ventanay;
-                }
-                
-                //ASTEROIDE
-                
-                anguloastradian = Math.toRadians(anguloasteroide);
-                posxas = Math.sin(anguloastradian);
-                posyas = Math.cos(anguloastradian);
-                
-                posxas += velocidadasteroide;
-                posyas += velocidadasteroide;
-                
-                nave.getnave().setLayoutX(posx);
-                nave.getnave().setLayoutY(posy);
-                nave.getnave().setRotate(direccionnave);
-                
-                asteroide.getpoligono().setLayoutX(posxas);
-                asteroide.getpoligono().setLayoutY(posyas);
             }
         };
 }//Cierre de la Clase JuegoNave
