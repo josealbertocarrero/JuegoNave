@@ -12,7 +12,7 @@ import javafx.scene.shape.Polygon;
  * @author DaSTer
  */
 public class Asteroide {
-    Polygon poligono = new Polygon ();
+    Polygon asteroidePoligono = new Polygon ();
     
     private int velocidadasteroide = 1;
     private double anguloastradian;
@@ -26,7 +26,7 @@ public class Asteroide {
     
     
     public Asteroide() {
-    poligono.getPoints().addAll(new Double[]{
+    asteroidePoligono.getPoints().addAll(new Double[]{
             0.0, 50.0,
             100.0, 100.0,
             200.0, 50.0,
@@ -35,7 +35,7 @@ public class Asteroide {
 
     }
     public Polygon getpoligono(){
-        return poligono;
+        return asteroidePoligono;
     }
     public void asteroideMover(){
         anguloastradian = Math.toRadians(anguloasteroide);

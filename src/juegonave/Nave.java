@@ -29,17 +29,17 @@ public class Nave {
     final int ventanax =800;
     final int ventanay =400;
     
-    Polygon nave = new Polygon();
-    
+    Polygon navePoligono = new Polygon();
+             
     public Nave(){
-    nave.getPoints().addAll(new Double[]{
+    navePoligono.getPoints().addAll(new Double[]{
             0.0, -30.0,
             10.0, 0.0,
             0.0, -5.0,
             -10.0, 0.0});
     }
     public Polygon getnave(){
-        return nave;
+        return navePoligono;
     }
     
     public void setVelocidadGiro(int vgiro){
@@ -87,5 +87,4 @@ public class Nave {
         getnave().setLayoutY(posy);
         getnave().setRotate(direccionnave);    
     }
-    
 }
