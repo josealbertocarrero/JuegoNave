@@ -19,8 +19,8 @@ public class Asteroide {
     private double anguloasteroide= Math.random()*359;
     private double direccionx;
     private double direcciony;
-    private double posxas = 400;
-    private double posyas = 200;
+    private double posxas = 800;
+    private double posyas = 400;
     final int ventanax =800;
     final int ventanay =400;
     
@@ -60,7 +60,7 @@ public class Asteroide {
             posyas = ventanay;
         }
         
-        getpoligono().setLayoutX(posxas);
-        getpoligono().setLayoutY(posyas);
+        getpoligono().setTranslateX(posxas);
+        getpoligono().setTranslateY(posyas);
     }
 }

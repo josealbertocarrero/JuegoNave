@@ -16,9 +16,11 @@ public class Nave {
     private double direccionnaveradianes;
     private double velocidadnave;
     private double velocidadgiro;
+    
     //Variables de la posicion nave
     private double direccionx;
     private double direcciony;
+    
     //Variables velocidad nave
     private double velocidadx=0;
     private double velocidady=0;
@@ -30,8 +32,9 @@ public class Nave {
     final int ventanay =400;
     
     Polygon navePoligono = new Polygon();
-             
-    public Nave(){
+    
+    public Nave(){     
+    navePoligono.setId("nave");
     navePoligono.getPoints().addAll(new Double[]{
             0.0, -30.0,
             10.0, 0.0,
@@ -83,8 +86,9 @@ public class Nave {
         if (posy < 0){
             posy = ventanay;
         }
-        getnave().setLayoutX(posx);
-        getnave().setLayoutY(posy);
+        getnave().setTranslateX(posx);
+        getnave().setTranslateY(posy);
         getnave().setRotate(direccionnave);    
+        
     }
 }

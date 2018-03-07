@@ -34,10 +34,12 @@ import javafx.stage.Stage;
  * @author DaSTer
  */
 public class Main extends Application {
+  
+    //Interacciones
+    Interacciones gameOver = new Interacciones();
+
     //Nave
     Nave nave = new Nave();
-    
-
     
     double posx = 400;
     double posy = 200;
@@ -48,16 +50,20 @@ public class Main extends Application {
     Scene ventana;
     //Asteroide
     Asteroide asteroide = new Asteroide();
+    Asteroide quitaAsteroides;
     
+    Bala quitaBalas;
     Bala bala;
     boolean colision;
     
     Text textoGameOver= new Text("Game Over");
     
     Pane root = new Pane();
-//Lista balas ArrayList
-    ArrayList<Bala> listaBalas = new ArrayList();
     
+    //Lista balas ArrayList
+    ArrayList<Bala> listaBalas = new ArrayList();
+    //Lista asteroides ArrayList
+    ArrayList<Asteroide> listaAsteroides = new ArrayList();
     @Override
     public void start(Stage primaryStage) {
         /*
@@ -73,9 +79,6 @@ public class Main extends Application {
         Bola bola5 = listaBolas.get(5);
         */
         
-
-        
-        
         ventana = new Scene(root, ventanax, ventanay, Color.BLACK);
         primaryStage.setScene(ventana);
         primaryStage.show();
@@ -85,30 +88,20 @@ public class Main extends Application {
         nave.getnave().setFill(Color.BLUE); 
         
         //Llamada a asteroide para mostrarlo en ventana
-        root.getChildren().add(asteroide.getpoligono());
-        asteroide.getpoligono().setFill(Color.RED);
         
+        
+        //Enlace a la hoja de estilos
         root.getStylesheets().add("estilos/estilos.css");
         
-        //Muestra final de partida
         
-        HBox gameOver = new HBox();
-        gameOver.setTranslateX(posx/2);
-        gameOver.setTranslateY(posy/2);
-        gameOver.setMinWidth(posx);
-        gameOver.setAlignment(Pos.CENTER);
-        gameOver.setSpacing(100);
-
-        root.getChildren().add(gameOver);
-
-        Text textoGameOver = new Text("Game Over");
-        textoGameOver.setFont(Font.font(50));
-        textoGameOver.setFill(Color.WHITE);
-
-        gameOver.getChildren().add(textoGameOver);
         
-        //ssssnave.setId("nave");
-        
+        //Creación Asteroides
+        for (int i=0; i<3; i++){
+           asteroide = new Asteroide();
+           listaAsteroides.add(asteroide);
+           root.getChildren().add(asteroide.getpoligono());
+           asteroide.getpoligono().setFill(Color.RED);
+        }
         
         ventana.setOnKeyPressed((KeyEvent event) -> {
             switch(event.getCode()){
@@ -132,7 +125,7 @@ public class Main extends Application {
             }
         });
         ventana.setOnKeyReleased((KeyEvent event) -> {
-            nave.setVelocidadGiro(0);
+        nave.setVelocidadGiro(0);
         });
         animationNave.start(); //Llamada a la animación
     }//Cierre Método Start
@@ -142,24 +135,35 @@ public class Main extends Application {
             public void handle(long now) {
                 //NAVE
                 nave.naveMover();
-                //ASTEROIDE 
-                asteroide.asteroideMover();
                 //BALA
                 for (int i=0; i<listaBalas.size(); i++){
                     Bala bala = listaBalas.get(i);
                     bala.mueveBala();
-                    
+                    for (int j=0; j<listaAsteroides.size(); j++){
+                       asteroide = listaAsteroides.get(j);
+                       asteroide.asteroideMover();
+                       Shape colisionbala = Shape.intersect(bala.bala, asteroide.asteroidePoligono);
+                       boolean colisionbalavacia = colisionbala.getBoundsInLocal().isEmpty();
+                       
+                       if( colisionbalavacia == false){
+                            quitaAsteroides = listaAsteroides.get(j);
+                            quitaBalas = listaBalas.get(i);
+                       }
+                    }
+                    listaAsteroides.remove(quitaAsteroides);
+                    listaBalas.remove(quitaBalas);
                 }
-                //for (int i=0;i<listaBalas;i++){
-                    
-                //}
-                Shape colision = Shape.intersect(nave.navePoligono, asteroide.asteroidePoligono);
-                boolean colisionVacia = colision.getBoundsInLocal().isEmpty();
-                if (colisionVacia == false){
-                    
+                //Lista Asteroides
+                for (int i=0; i<listaAsteroides.size(); i++){
+                    asteroide = listaAsteroides.get(i);
+                    asteroide.asteroideMover();
+                    Shape colision = Shape.intersect(nave.navePoligono, asteroide.asteroidePoligono);
+                    boolean colisionVacia = colision.getBoundsInLocal().isEmpty();
+                    if (colisionVacia == false){
+                        gameOver.gameOver(root);
+                        animationNave.stop();
+                    }
                 }
-                
-                
             }
-        };
+    };
 }//Cierre de la Clase JuegoNave

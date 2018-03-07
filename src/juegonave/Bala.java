@@ -28,6 +28,8 @@ public class Bala {
     final int ventanax =800;
     final int ventanay =400;
     
+    private double velocidadbala = 5;
+    
     public Bala(double posx, double posy, double angulo) {
         posxbala = posx;
         posybala = posy;
@@ -42,8 +44,8 @@ public class Bala {
     }
     
     public void mueveBala(){
-        posxbala += direccionx;
-        posybala += -direcciony;
+        posxbala += direccionx * velocidadbala;
+        posybala += -direcciony * velocidadbala;
         
         resto = angulobala % 360;
         anguloradianes = Math.toRadians(resto);
