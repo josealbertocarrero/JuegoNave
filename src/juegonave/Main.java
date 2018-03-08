@@ -50,9 +50,9 @@ public class Main extends Application {
     Scene ventana;
     //Asteroide
     Asteroide asteroide = new Asteroide();
-    Asteroide quitaAsteroides;
+
     
-    Bala quitaBalas;
+
     Bala bala;
     boolean colision;
     
@@ -116,11 +116,9 @@ public class Main extends Application {
                     nave.pulsaArriba();
                     break;
                 case SPACE:
-                        bala = new Bala(nave.posx, nave.posy, nave.angulonave);
-                        listaBalas.add(bala);
-                        root.getChildren().add(bala.getBala());
-                        //Bola bola5 = listaBolas.get(5);
-
+                    bala = new Bala(nave.posx, nave.posy, nave.angulonave);
+                    listaBalas.add(bala);
+                    root.getChildren().add(bala.getBala());
                     break;
             }
         });
@@ -133,6 +131,8 @@ public class Main extends Application {
     AnimationTimer animationNave = new AnimationTimer() {
             @Override
             public void handle(long now) {
+                Bala quitaBalas = null;
+                Asteroide quitaAsteroides = null;
                 //NAVE
                 nave.naveMover();
                 //BALA
@@ -141,7 +141,6 @@ public class Main extends Application {
                     bala.mueveBala();
                     for (int j=0; j<listaAsteroides.size(); j++){
                        asteroide = listaAsteroides.get(j);
-                       asteroide.asteroideMover();
                        Shape colisionbala = Shape.intersect(bala.bala, asteroide.asteroidePoligono);
                        boolean colisionbalavacia = colisionbala.getBoundsInLocal().isEmpty();
                        
@@ -150,8 +149,15 @@ public class Main extends Application {
                             quitaBalas = listaBalas.get(i);
                        }
                     }
-                    listaAsteroides.remove(quitaAsteroides);
+                }
+                
+                if (quitaBalas != null) {
                     listaBalas.remove(quitaBalas);
+                    root.getChildren().remove(quitaBalas.bala);
+                }
+                if (quitaAsteroides != null){
+                    listaAsteroides.remove(quitaAsteroides);
+                    root.getChildren().remove(quitaAsteroides.asteroidePoligono);
                 }
                 //Lista Asteroides
                 for (int i=0; i<listaAsteroides.size(); i++){
