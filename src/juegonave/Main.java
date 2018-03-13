@@ -51,7 +51,8 @@ public class Main extends Application {
     //Asteroide
     Asteroide asteroide = new Asteroide();
 
-    
+    //Interacciones
+    Interacciones interacciones = new Interacciones();
 
     Bala bala;
     boolean colision;
@@ -64,6 +65,18 @@ public class Main extends Application {
     ArrayList<Bala> listaBalas = new ArrayList();
     //Lista asteroides ArrayList
     ArrayList<Asteroide> listaAsteroides = new ArrayList();
+    
+    //Reset, crear Asteroides despues del Game Over.
+    public void resetGameasteroides(){
+        for (int i=0; i<3; i++){
+           asteroide = new Asteroide();
+           listaAsteroides.add(asteroide);
+           root.getChildren().add(asteroide.getpoligono());
+           asteroide.getpoligono().setFill(Color.RED);
+        }
+    }
+    
+    
     @Override
     public void start(Stage primaryStage) {
         /*
@@ -93,7 +106,8 @@ public class Main extends Application {
         //Enlace a la hoja de estilos
         root.getStylesheets().add("estilos/estilos.css");
         
-        
+        // Metodo Marcador
+        interacciones.marcador(root);
         
         //Creación Asteroides
         for (int i=0; i<3; i++){
@@ -150,15 +164,19 @@ public class Main extends Application {
                        }
                     }
                 }
-                
+                //Quitar las balas y los asteroides
                 if (quitaBalas != null) {
                     listaBalas.remove(quitaBalas);
                     root.getChildren().remove(quitaBalas.bala);
+                    interacciones.aumentarPuntuacion();
+                    interacciones.cambiarPmaxima();
                 }
+                
                 if (quitaAsteroides != null){
                     listaAsteroides.remove(quitaAsteroides);
                     root.getChildren().remove(quitaAsteroides.asteroidePoligono);
                 }
+                
                 //Lista Asteroides
                 for (int i=0; i<listaAsteroides.size(); i++){
                     asteroide = listaAsteroides.get(i);
