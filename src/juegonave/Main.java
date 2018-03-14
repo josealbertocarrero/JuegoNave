@@ -79,19 +79,7 @@ public class Main extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        /*
-        Declaracion del arraylist:
-        Arraylist<Bola> listaBolas = new Arraylist();
-        
-        Añadir bolas a la lista:
-        for (int i=0; i<10; i++){
-            Bola bola = new Bola();
-            listaBolas.add(bola);ssss
-        }
-        Cojer la lista:
-        Bola bola5 = listaBolas.get(5);
-        */
-        
+
         ventana = new Scene(root, ventanax, ventanay, Color.BLACK);
         primaryStage.setScene(ventana);
         primaryStage.show();
@@ -122,7 +110,6 @@ public class Main extends Application {
                 case RIGHT:
                     nave.setVelocidadGiro(1);
                     break;
-                    //nave.velocidadgiro=1;break;
                 case LEFT:
                     nave.setVelocidadGiro(-1);
                     break;
