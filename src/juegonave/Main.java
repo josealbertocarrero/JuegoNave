@@ -123,9 +123,6 @@ public class Main extends Application {
                     break;
             }
         });
-        ventana.setOnKeyReleased((KeyEvent event) -> {
-        nave.setVelocidadGiro(0);
-        });
         animationNave.start(); //Llamada a la animación
     }//Cierre Método Start
     
